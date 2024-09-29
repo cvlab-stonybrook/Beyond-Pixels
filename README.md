@@ -19,3 +19,20 @@ Beyond Pixels: Semi-Supervised Semantic Segmentation with a Multi-scale Patch-ba
 
 
 Please modify your dataset path in configuration files.
+```
+├── [Your Pascal Path]
+    ├── JPEGImages
+    └── SegmentationClass
+    
+├── [Your Cityscapes Path]
+    ├── leftImg8bit
+    └── gtFine
+    
+```
+## Usage
+
+### UniMatch + MPMC
+
+```bash
+# use torch.distributed.launch
+sh scripts/train.sh 
