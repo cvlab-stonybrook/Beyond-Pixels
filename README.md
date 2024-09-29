@@ -35,4 +35,16 @@ Please modify your dataset path in configuration files.
 
 ```bash
 # use torch.distributed.launch
-sh scripts/train.sh 
+sh scripts/train.sh
+## Citation
+
+If you find this project useful, please consider citing:
+
+```bibtex
+@article{howlader2024beyond,
+  title={Beyond Pixels: Semi-Supervised Semantic Segmentation with a Multi-scale Patch-based Multi-Label Classifier},
+  author={Howlader, Prantik and Das, Srijan and Le, Hieu and Samaras, Dimitris},
+  journal={arXiv preprint arXiv:2407.04036},
+  year={2024}
+}
+```
