@@ -36,6 +36,7 @@ Please modify your dataset path in configuration files.
 ```bash
 # use torch.distributed.launch
 sh scripts/train.sh
+```
 ## Citation
 
 If you find this project useful, please consider citing:
