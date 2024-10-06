@@ -1,7 +1,8 @@
 # Beyond-Pixels
 Beyond Pixels: Semi-Supervised Semantic Segmentation with a Multi-scale Patch-based Multi-Label Classifier (Accepted ECCV 2024)
 
-### If you have any questions, please email Prantik Howlader at phowlader@cs.stonybrook.edu.
+### Contact
+If you have any questions, please email Prantik Howlader at phowlader@cs.stonybrook.edu.
 
 ### Pretrained Backbone
 
