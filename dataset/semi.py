@@ -70,7 +70,7 @@ class SemiDataset(Dataset):
         mask = torch.from_numpy(np.array(mask)).long()
         ignore_mask[mask == 254] = 255
 
-        return normalize(img_w), img_s1, img_s2, ignore_mask, cutmix_box1, cutmix_box2
+        return normalize(img_w), img_s1, img_s2, ignore_mask, cutmix_box1, cutmix_box2, mask
 
     def __len__(self):
         return len(self.ids)
