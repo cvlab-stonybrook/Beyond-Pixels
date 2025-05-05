@@ -36,6 +36,8 @@ class DeepLabV3Plus(nn.Module):
                                   nn.ReLU(True))
 
         self.classifier = nn.Conv2d(256, cfg['nclass'], 1, bias=True)
+        self.prantik_avgpool1 = nn.AvgPool2d(7, stride=1, padding=3)
+        self.prantik_avgpool2 = nn.AvgPool2d(19, stride=1, padding=9)
 #         self.convolution_prantik = nn.Conv2d(256,128,  kernel_size=1, stride=1, bias=False)
 #         self.classifier_prantik_1 = nn.Linear(128, 64)#128
 #         self.classifier_prantik_2 = nn.Linear(64, 19)
@@ -167,7 +169,10 @@ class DeepLabV3Plus(nn.Module):
                 #c1_lb = c1[:nlabel]#torch.Size([1, 256, 201, 201])
                 #print(torch.cat( (c1,nn.Dropout2d(0.5)(c1)) ).shape)#[4, 256, 201, 201]
                 #print(asasasas)
-                c1_lb = self.convolution_prantik(torch.cat( (c1,nn.Dropout2d(0.5)(c1))))#[4, 64, 201, 201]
+                c1_avgpool1 = self.prantik_avgpool1(c1)
+                c1_avgpool2 = self.prantik_avgpool2(c1)
+                c1_lb = self.convolution_prantik(torch.cat( (c1,c1_avgpool1,c1_avgpool2)))#[4, 64, 201, 201]
+                #c1_lb = self.convolution_prantik(torch.cat( (c1,nn.Dropout2d(0.5)(c1))))#[4, 64, 201, 201]
                 c1_lb = c1_lb.view(c1_lb.shape[0],c1_lb.shape[1],-1)
                 c1_lb = c1_lb.permute(0,2,1)#torch.Size([4, 40401, 64])
                 classifier_feats = F.relu(self.classifier_prantik_1(c1_lb))
