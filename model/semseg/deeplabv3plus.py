@@ -44,6 +44,12 @@ class DeepLabV3Plus(nn.Module):
 #         self.dropout_prantik = nn.Dropout(0.20)
 #####################################################################################################
         self.convolution_prantik = nn.Sequential( ##########################################################################68.29
+                                                 nn.Conv2d(768,768,  kernel_size=1, stride=1, bias=False),
+                                                 nn.BatchNorm2d(768),
+                                                 nn.ReLU(True),
+                                                 nn.Conv2d(768,256,  kernel_size=3, padding=1,stride=1, bias=False),
+                                                 nn.BatchNorm2d(256),
+                                                 nn.ReLU(True),
                                                  nn.Conv2d(256,256,  kernel_size=1, stride=1, bias=False),
                                                  nn.BatchNorm2d(256),
                                                  nn.ReLU(True),
@@ -171,7 +177,7 @@ class DeepLabV3Plus(nn.Module):
                 #print(asasasas)
                 c1_avgpool1 = self.prantik_avgpool1(c1)
                 c1_avgpool2 = self.prantik_avgpool2(c1)
-                c1_lb = self.convolution_prantik(torch.cat( (c1,c1_avgpool1,c1_avgpool2)))#[4, 64, 201, 201]
+                c1_lb = self.convolution_prantik(torch.cat( ( torch.cat( (c1,c1_avgpool1,c1_avgpool2),dim=1)   ,nn.Dropout2d(0.5)(torch.cat( (c1,c1_avgpool1,c1_avgpool2),dim=1)))))#[4, 64, 201, 201]
                 #c1_lb = self.convolution_prantik(torch.cat( (c1,nn.Dropout2d(0.5)(c1))))#[4, 64, 201, 201]
                 c1_lb = c1_lb.view(c1_lb.shape[0],c1_lb.shape[1],-1)
                 c1_lb = c1_lb.permute(0,2,1)#torch.Size([4, 40401, 64])
@@ -216,7 +222,9 @@ class DeepLabV3Plus(nn.Module):
         out = self._decode(c1, c4)
         out = F.interpolate(out, size=(h, w), mode="bilinear", align_corners=True)
         if classify:
-            c1 = self.convolution_prantik(c1)
+            c1_avgpool1 = self.prantik_avgpool1(c1)
+            c1_avgpool2 = self.prantik_avgpool2(c1)
+            c1 = self.convolution_prantik(torch.cat( (c1,c1_avgpool1,c1_avgpool2),dim=1))
             c1 = c1.view(c1.shape[0],c1.shape[1],-1)
             c1 = c1.permute(0,2,1)#torch.Size([2, 40401, 256])
             classifier_feats = F.relu(self.classifier_prantik_1(c1))
